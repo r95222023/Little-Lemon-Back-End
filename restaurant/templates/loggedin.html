@@ -1,0 +1,16 @@
+<h2>Loged in successfully</h2>
+<p>username: {{username}}</p>
+<p>refresh token: {{refresh_token}}</p>
+<p>access token: {{access_token}}</p>
+<p>Redirect to home in 10 seconds.</p>
+
+<script>
+    // srore authentication tokens
+    localStorage.setItem('littlelemon_username', '{{username}}')
+    localStorage.setItem('littlelemon_access_token', '{{access_token}}')
+    localStorage.setItem('littlelemon_refresh_token', '{{refresh_token}}')
+    // redirec to homepage after 10 seconds
+    setTimeout(
+        ()=>{location.href = location.protocol + '//' + location.host}, 3000
+    )
+</script>

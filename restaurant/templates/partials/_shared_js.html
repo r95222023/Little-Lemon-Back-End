@@ -1,0 +1,79 @@
+{% load static %}
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/cjs/index.min.js"></script>
+
+<script>
+  console.log('shared js initialized');
+
+  let toggleLogIn = (isLoggedIn) => {
+    let e_login = document.getElementById("login");
+    let e_logout = document.getElementById("logout");
+    if (!isLoggedIn) {
+      e_logout.style.display = "none";
+      e_login.style.display = "";
+    } else {
+      e_login.style.display = "none";
+      e_logout.style.display = "";
+    }
+  }
+
+  let isLoggedIn = () => {
+    return !!localStorage.getItem("littlelemon_refresh_token")
+  }
+
+  let setAuthData = (data) => {
+    if(data.username) {localStorage.setItem("littlelemon_username", data.username)}
+    localStorage.setItem("littlelemon_refresh_token", data.refresh)
+    localStorage.setItem("littlelemon_access_token", data.access)
+  }
+
+  let getAuthData = (data) => {
+    let res = {}
+    res.user = localStorage.getItem("littlelemon_username")
+    res.refresh = localStorage.getItem("littlelemon_refresh_token")
+    res.access = localStorage.getItem("littlelemon_access_token")
+    return res
+  }
+
+  let removeAuthData = (data) => {
+    res.user = localStorage.removeItem("littlelemon_username")
+    res.refresh = localStorage.removeItem("littlelemon_refresh_token")
+    res.access = localStorage.removeItem("littlelemon_access_token")
+  }
+
+  let updateToken = async ()=> {
+    if (!isLoggedIn()) {toggleLogIn(false); return}
+    const refreshToken = localStorage.getItem("littlelemon_refresh_token")
+    const hosturl = location.protocol + '//' + location.host
+    let response = await fetch(hosturl + '/api/token/refresh/', {
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify({'refresh':refreshToken})
+    })
+
+    let data = await response.json()
+
+    if (response.status === 200){
+      console.log('Successfully refreshed the access token')
+      setAuthData(data)
+    } else {
+      console.log('Failed to authenticate, auth tokens are removed')
+      removeAuthData()
+      toggleLogIn(false)
+    }
+  }
+
+  let update_token_periodically = () => {
+    updateToken()
+        // refresh access token every 4 minutes
+        let fourMinutes = 1000 * 60 * 4
+        let interval =  setInterval(updateToken, fourMinutes)
+        return ()=> clearInterval(interval)
+  }
+  
+  toggleLogIn(isLoggedIn());
+  if (isLoggedIn()) {
+    update_token_periodically();
+  }
+</script>

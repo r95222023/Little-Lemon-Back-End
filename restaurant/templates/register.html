@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section>
+  <article>
+    <h1 style="text-align: center;">Register</h1>
+    <!--Begin row-->
+    <div class="row">
+      <!--Begin col-->
+      <div class="column" style="margin: auto;">
+        {% csrf_token %}
+          <form method="POST" id="form">
+            {% csrf_token %}
+            {{registerform.as_p}}
+            <input type="submit" value="Register"/>
+            <!-- <p>
+              <label for="username">Username:</label>
+              <input type="text" placeholder="Enter Username" maxlength="200" required="" id="username" style="width: 100%;">
+            </p>
+            <p>
+              <label for="password">Password:</label>
+              <input type="text" placeholder="Enter Password" id="password" style="width: 100%;">
+            </p>
+            <button type="button" id="button" style="width: 100%;">Reserve</button> -->
+          </form>
+      </div>
+      <!--End col-->
+    </div>
+    <!--End row-->
+
+  </article>
+</section>
+<script>
+  // getUsers()
+
+  // Monitor the date input, to update bookings view.
+  document.getElementById('username').addEventListener('focusout', getUsers)
+
+  function getUsers() {
+    username = document.getElementById('username').value
+    formdata = {'username': username}
+    fetch("{% url 'check_user' %}", { method: 'post', body: JSON.stringify(formdata) })
+      .then(r => r.json())
+      .then(data => {
+        user_exist = data['user_exist']
+        if (user_exist) {
+          document.getElementById('user_exist').innerHTML = '<p>Username already taken</p>'
+        } else {
+          document.getElementById('user_exist').innerHTML = ''
+        }
+      })
+  }
+  
+  function register() {
+    fetch("{% url 'register' %}", { method: 'post', body: JSON.stringify(formdata) })
+    return
+  }
+
+  function formatTime(time) {
+    const ampm = time < 12 ? 'AM' : 'PM'
+    const t = time < 12 ? time : time > 12 ? time - 12 : time
+    const label = `${t} ${ampm}`
+    return label
+  }
+
+
+  document.getElementById('button').addEventListener('click', function (e) {
+    const formdata = {
+      first_name: document.getElementById('first_name').value,
+      reservation_date: document.getElementById('reservation_date').value,
+      reservation_slot: document.getElementById('reservation_slot').value,
+    }
+
+    fetch("{% url 'book_api' %}", { method: 'post', body: JSON.stringify(formdata) })
+      .then(r => r.text())
+      // .then(getBookings)
+      .then(alert("Reserved successfully"))
+  })
+</script>
+{% endblock %}
