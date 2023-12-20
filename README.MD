@@ -92,7 +92,7 @@ To use this application, follow these steps:
 For code testing, execute the following command:
 
 ```bash
-   python manage.py test
+   python manage.py test restaurant/Tests
 ```
 
 The API can also be tested using the Insomnia REST client or other tools.
