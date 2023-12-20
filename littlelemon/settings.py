@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     # The settings for app updated for the Graded assessment
     'restaurant',
     'rest_framework',
+    'djoser',
     'rest_framework_simplejwt.token_blacklist',
     "corsheaders",
 ]
