@@ -1,6 +1,6 @@
-<h2>Logged out successfully</h2>
-<p>Redirect to home in 10 seconds.</p>
-
+<!--<h2>Logged out successfully</h2>-->
+<!--<p>Redirect to home in 10 seconds.</p>-->
+<!--This page will be created (see views.logout) to remove tokens in localStorage-->
 <script>
     // srore authentication tokens
     localStorage.removeItem('littlelemon_username')
@@ -8,6 +8,6 @@
     localStorage.removeItem('littlelemon_refresh_token')
     // redirec to homepage after 10 seconds
     setTimeout(
-        ()=>{location.href = location.protocol + '//' + location.host}, 3000
+        ()=>{location.href = location.protocol + '//' + location.host}, 50
     )
 </script>

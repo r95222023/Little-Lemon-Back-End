@@ -13,15 +13,6 @@
             {% csrf_token %}
             {{registerform.as_p}}
             <input type="submit" value="Register"/>
-            <!-- <p>
-              <label for="username">Username:</label>
-              <input type="text" placeholder="Enter Username" maxlength="200" required="" id="username" style="width: 100%;">
-            </p>
-            <p>
-              <label for="password">Password:</label>
-              <input type="text" placeholder="Enter Password" id="password" style="width: 100%;">
-            </p>
-            <button type="button" id="button" style="width: 100%;">Reserve</button> -->
           </form>
       </div>
       <!--End col-->
@@ -51,30 +42,9 @@
       })
   }
   
-  function register() {
+  function register(formdata) {
     fetch("{% url 'register' %}", { method: 'post', body: JSON.stringify(formdata) })
     return
   }
-
-  function formatTime(time) {
-    const ampm = time < 12 ? 'AM' : 'PM'
-    const t = time < 12 ? time : time > 12 ? time - 12 : time
-    const label = `${t} ${ampm}`
-    return label
-  }
-
-
-  document.getElementById('button').addEventListener('click', function (e) {
-    const formdata = {
-      first_name: document.getElementById('first_name').value,
-      reservation_date: document.getElementById('reservation_date').value,
-      reservation_slot: document.getElementById('reservation_slot').value,
-    }
-
-    fetch("{% url 'book_api' %}", { method: 'post', body: JSON.stringify(formdata) })
-      .then(r => r.text())
-      // .then(getBookings)
-      .then(alert("Reserved successfully"))
-  })
 </script>
 {% endblock %}
